@@ -9,8 +9,9 @@ import {
 	filterBooks,
 	searchBookByName,
 	sortBooks,
-} from '../store/bookSlice';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+} from '../../store/bookSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import styles from './searchBar.module.css';
 
 const filterList = [
 	'all',
@@ -53,15 +54,7 @@ const SearchBar = () => {
 	};
 
 	return (
-		<div
-			style={{
-				margin: '0 auto',
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-		>
+		<div className={styles.searchBar}>
 			<h1>Search for Book</h1>
 			<InputGroup style={{ width: '50%' }}>
 				<Form.Control

@@ -1,0 +1,29 @@
+.listWrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.prompt {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.spinner {
+	margin-inline: auto;
+	margin-top: 2rem;
+	margin-bottom: 1rem;
+}
+
+.list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, 250px);
+	gap: 0.5rem;
+	margin-block: 2rem;
+	justify-content: center;
+}
+
+.button {
+	margin-inline: auto;
+	margin-bottom: 1rem;
+}

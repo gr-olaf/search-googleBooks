@@ -1,0 +1,31 @@
+.card {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.cardImage {
+	height: 200px;
+	width: auto;
+	margin-top: 1rem;
+	box-shadow: 10px 10px 10px grey;
+}
+
+.cardBody {
+	width: 230px;
+	margin-top: 1rem;
+}
+
+.cardBodyCategory {
+	text-decoration: underline;
+	opacity: 50%;
+}
+
+.cardBodyTitle {
+	font-size: 1.1rem;
+}
+
+.cardBodyAuthor {
+	font-size: 0.8rem;
+	opacity: 50%;
+}

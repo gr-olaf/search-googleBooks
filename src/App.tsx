@@ -1,5 +1,5 @@
-import SearchBar from './components/SearchBar';
-import BookList from './components/BookList';
+import SearchBar from './components/searchBar/SearchBar';
+import BookList from './components/bookList/BookList';
 
 function App() {
 	return (

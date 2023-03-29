@@ -1,8 +1,9 @@
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import BookItem from './BookItem';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import BookItem from '../bookItem/BookItem';
 import { Button, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
-import { fetchBooks } from '../store/bookSlice';
+import { fetchBooks } from '../../store/bookSlice';
+import styles from './bookList.module.css';
 
 interface Item {
 	id: string;
@@ -30,37 +31,17 @@ const BookList = () => {
 	}
 
 	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-				justifyContent: 'center',
-			}}
-		>
+		<div className={styles.listWrapper}>
 			{!books.length && !name.trim().length && (
-				<h4 style={{ textAlign: 'center', marginTop: '2rem' }}>
-					Search your book
-				</h4>
+				<h4 className={styles.prompt}>Search your book</h4>
 			)}
 			{status === 'loading' && (
-				<Spinner
-					animation="border"
-					role="status"
-					style={{ marginInline: 'auto', marginTop: '2rem' }}
-				>
+				<Spinner animation="border" role="status" className={styles.spinner}>
 					<span className="visually-hidden">Loading...</span>
 				</Spinner>
 			)}
 			{status === 'rejected' && <h2>Error occured</h2>}
-			<div
-				style={{
-					display: 'grid',
-					gridTemplateColumns: 'repeat(auto-fit, 250px)',
-					gap: '0.5rem',
-					marginBlock: '2rem',
-					justifyContent: 'center',
-				}}
-			>
+			<div className={styles.list}>
 				{books.map((item: Item) => {
 					const { id } = item;
 					const { imageLinks, categories, title, authors } = item.volumeInfo;
@@ -77,17 +58,13 @@ const BookList = () => {
 			</div>
 			{books.length ? (
 				status === 'loading' ? (
-					<Spinner
-						animation="border"
-						role="status"
-						style={{ marginInline: 'auto', marginBottom: '1rem' }}
-					>
+					<Spinner animation="border" role="status" className={styles.spinner}>
 						<span className="visually-hidden">Loading...</span>
 					</Spinner>
 				) : (
 					<Button
 						variant="secondary"
-						style={{ marginInline: 'auto', marginBottom: '1rem' }}
+						className={styles.button}
 						onClick={handleClick}
 					>
 						Load more
