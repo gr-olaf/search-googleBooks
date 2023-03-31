@@ -14,6 +14,7 @@ interface Item {
 		categories: string[];
 		title: string;
 		authors: string[];
+		description: string;
 	};
 }
 
@@ -44,14 +45,16 @@ const BookList = () => {
 			<div className={styles.list}>
 				{books.map((item: Item) => {
 					const { id } = item;
-					const { imageLinks, categories, title, authors } = item.volumeInfo;
+					const { imageLinks, categories, title, authors, description } =
+						item.volumeInfo;
 					return (
 						<BookItem
 							key={id}
 							img={imageLinks ? imageLinks.smallThumbnail : ''}
-							category={categories ? categories[0] : ''}
+							category={categories ? categories : []}
 							title={title}
 							author={authors ? authors.join(', ') : ''}
+							description={description ? description : ''}
 						/>
 					);
 				})}

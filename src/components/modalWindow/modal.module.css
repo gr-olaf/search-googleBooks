@@ -1,0 +1,24 @@
+.modalCard {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	border: none;
+}
+
+.modalImage {
+	height: 400px;
+}
+
+.modalBody {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+@media screen and (max-widht: 995px) {
+	.modalCard {
+		flex-direction: column;
+	}
+}
