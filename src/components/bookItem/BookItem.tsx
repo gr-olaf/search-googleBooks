@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import ModalWindow from '../modalWindow/ModalWindow';
-import styles from './bookItem.module.css';
+import styles from './bookItem.module.scss';
 
 interface BookItemProps {
 	img: string;

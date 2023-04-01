@@ -1,5 +1,5 @@
 import { Modal, Card } from 'react-bootstrap';
-import styles from './modal.module.css';
+import styles from './modal.module.scss';
 
 interface ModalWindowProps {
 	show: boolean;

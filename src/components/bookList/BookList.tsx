@@ -3,7 +3,7 @@ import BookItem from '../bookItem/BookItem';
 import { Button, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
 import { fetchBooks } from '../../store/bookSlice';
-import styles from './bookList.module.css';
+import styles from './bookList.module.scss';
 
 interface Item {
 	id: string;

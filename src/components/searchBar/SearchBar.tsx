@@ -11,7 +11,7 @@ import {
 	sortBooks,
 } from '../../store/bookSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import styles from './searchBar.module.css';
+import styles from './searchBar.module.scss';
 
 const filterList = [
 	'all',
