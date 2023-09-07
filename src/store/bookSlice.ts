@@ -1,98 +1,18 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
-
-interface BookState {
-	name: string;
-	filter: string;
-	sort: string;
-	books: any;
-	status: any;
-	error: any;
-}
-
-interface fetchArgs {
-	name: string;
-	maxResults: number;
-	startIndex: number;
-}
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { BookState, FilterType, IResponse, SortType } from '../types/types';
+import { fetchBooks } from '../services/fetchBooks';
+import { fetchFilteredBooks } from '../services/fetchFilteredBooks';
+import { fetchSortedBooks } from '../services/fetchSortedBooks';
 
 const initialState: BookState = {
+	totalItems: 0,
 	name: '',
-	filter: '',
-	sort: '',
+	filter: 'all',
+	sort: 'relevance',
 	books: [],
 	status: null,
 	error: null,
 };
-
-const keyApi = 'AIzaSyBuc0-k3tYorVv9FZXoqnVPwyPE3uuslds';
-
-export const fetchBooks = createAsyncThunk(
-	'books/fetchBooks',
-	async (args: fetchArgs, thunkAPI) => {
-		try {
-			const response = await axios.get(
-				`https://www.googleapis.com/books/v1/volumes?q=${args.name}&maxResults=${args.maxResults}&startIndex=${args.startIndex}&key=${keyApi}`
-			);
-
-			if (response.status !== 200) {
-				throw new Error('Server Error!');
-			}
-
-			return response.data.items;
-		} catch (error: any) {
-			return thunkAPI.rejectWithValue(error.message);
-		}
-	}
-);
-
-export const fetchFilteredBooks = createAsyncThunk(
-	'books/fetchFilteredBooks',
-	async (args: fetchArgs, { rejectWithValue, getState }: any) => {
-		const filter = getState().books.filter;
-		try {
-			let response;
-
-			if (filter === 'all') {
-				response = await axios.get(
-					`https://www.googleapis.com/books/v1/volumes?q=${args.name}&maxResults=${args.maxResults}&startIndex=${args.startIndex}&key=${keyApi}`
-				);
-			} else {
-				response = await axios.get(
-					`https://www.googleapis.com/books/v1/volumes?q=${args.name}+subject:${filter}&maxResults=${args.maxResults}&startIndex=${args.startIndex}&key=${keyApi}`
-				);
-			}
-
-			if (response.status !== 200) {
-				throw new Error('Server Error!');
-			}
-
-			return response.data.items;
-		} catch (error: any) {
-			return rejectWithValue(error.message);
-		}
-	}
-);
-
-export const fetchSortedBooks = createAsyncThunk(
-	'books/fetchSortedBooks',
-	async (args: fetchArgs, { rejectWithValue, getState }: any) => {
-		const sort = getState().books.sort;
-		try {
-			const response = await axios.get(
-				`https://www.googleapis.com/books/v1/volumes?q=${args.name}&orderBy=${sort}&maxResults=${args.maxResults}&startIndex=${args.startIndex}&key=${keyApi}`
-			);
-
-			if (response.status !== 200) {
-				throw new Error('Server Error!');
-			}
-
-			return response.data.items;
-		} catch (error: any) {
-			return rejectWithValue(error.message);
-		}
-	}
-);
 
 const bookSlice = createSlice({
 	name: 'books',
@@ -101,10 +21,10 @@ const bookSlice = createSlice({
 		searchBookByName(state, action: PayloadAction<string>) {
 			state.name = action.payload;
 		},
-		filterBooks(state, action: PayloadAction<string>) {
+		filterBooks(state, action: PayloadAction<FilterType>) {
 			state.filter = action.payload;
 		},
-		sortBooks(state, action: PayloadAction<string>) {
+		sortBooks(state, action: PayloadAction<SortType>) {
 			state.sort = action.payload;
 		},
 		clearBooks(state) {
@@ -117,10 +37,14 @@ const bookSlice = createSlice({
 				state.status = 'loading';
 				state.error = null;
 			})
-			.addCase(fetchBooks.fulfilled, (state, action) => {
-				state.status = 'resolved';
-				state.books.push(...action.payload);
-			})
+			.addCase(
+				fetchBooks.fulfilled,
+				(state, action: PayloadAction<IResponse>) => {
+					state.status = 'resolved';
+					state.books.push(...action.payload.items);
+					state.totalItems = action.payload.totalItems;
+				}
+			)
 			.addCase(fetchBooks.rejected, (state, action) => {
 				state.status = 'rejected';
 				state.error = action.payload;
@@ -129,10 +53,14 @@ const bookSlice = createSlice({
 				state.status = 'loading';
 				state.error = null;
 			})
-			.addCase(fetchFilteredBooks.fulfilled, (state, action) => {
-				state.status = 'resolved';
-				state.books.push(...action.payload);
-			})
+			.addCase(
+				fetchFilteredBooks.fulfilled,
+				(state, action: PayloadAction<IResponse>) => {
+					state.status = 'resolved';
+					state.books.push(...action.payload.items);
+					state.totalItems = action.payload.totalItems;
+				}
+			)
 			.addCase(fetchFilteredBooks.rejected, (state, action) => {
 				state.status = 'rejected';
 				state.error = action.payload;
@@ -141,10 +69,14 @@ const bookSlice = createSlice({
 				state.status = 'loading';
 				state.error = null;
 			})
-			.addCase(fetchSortedBooks.fulfilled, (state, action) => {
-				state.status = 'resolved';
-				state.books.push(...action.payload);
-			})
+			.addCase(
+				fetchSortedBooks.fulfilled,
+				(state, action: PayloadAction<IResponse>) => {
+					state.status = 'resolved';
+					state.books.push(...action.payload.items);
+					state.totalItems = action.payload.totalItems;
+				}
+			)
 			.addCase(fetchSortedBooks.rejected, (state, action) => {
 				state.status = 'rejected';
 				state.error = action.payload;

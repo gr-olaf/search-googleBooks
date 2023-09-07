@@ -1,29 +1,17 @@
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import BookItem from '../bookItem/BookItem';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import BookItem from '../BookItem/BookItem';
 import { Button, Spinner } from 'react-bootstrap';
 import { useState } from 'react';
-import { fetchBooks } from '../../store/bookSlice';
-import styles from './bookList.module.scss';
-
-interface Item {
-	id: string;
-	volumeInfo: {
-		imageLinks: {
-			smallThumbnail: string;
-		};
-		categories: string[];
-		title: string;
-		authors: string[];
-		description: string;
-	};
-}
+import { fetchBooks } from '../../services/fetchBooks';
+import styles from './BookList.module.scss';
+import { Loader } from '../ui/Loader/Loader';
 
 const BookList = () => {
 	const [index, setIndex] = useState(30);
-
 	const name = useAppSelector((state) => state.books.name);
 	const books = useAppSelector((state) => state.books.books);
-	const { status, error } = useAppSelector((state) => state.books);
+	const totalItems = useAppSelector((state) => state.books.totalItems);
+	const status = useAppSelector((state) => state.books.status);
 	const dispatch = useAppDispatch();
 
 	function handleClick() {
@@ -31,19 +19,22 @@ const BookList = () => {
 		dispatch(fetchBooks({ name, maxResults: 30, startIndex: index }));
 	}
 
+	if (!books.length && !name.trim().length) {
+		return <h4 className={styles.prompt}>Search your book</h4>;
+	}
+
+	if (status === 'rejected') {
+		return <h2>Error occured</h2>;
+	}
+
 	return (
 		<div className={styles.listWrapper}>
-			{!books.length && !name.trim().length && (
-				<h4 className={styles.prompt}>Search your book</h4>
+			{status === 'loading' && <Loader />}
+			{Boolean(totalItems) && (
+				<p className={styles.total}>Found: {totalItems}</p>
 			)}
-			{status === 'loading' && (
-				<Spinner animation="border" role="status" className={styles.spinner}>
-					<span className="visually-hidden">Loading...</span>
-				</Spinner>
-			)}
-			{status === 'rejected' && <h2>Error occured</h2>}
 			<div className={styles.list}>
-				{books.map((item: Item) => {
+				{books.map((item) => {
 					const { id } = item;
 					const { imageLinks, categories, title, authors, description } =
 						item.volumeInfo;
@@ -61,9 +52,7 @@ const BookList = () => {
 			</div>
 			{books.length ? (
 				status === 'loading' ? (
-					<Spinner animation="border" role="status" className={styles.spinner}>
-						<span className="visually-hidden">Loading...</span>
-					</Spinner>
+					<Loader />
 				) : (
 					<Button
 						variant="secondary"
