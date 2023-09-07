@@ -1,17 +1,18 @@
-import { ChangeEvent, useState } from 'react';
-import { Form, Button, InputGroup, Row, Col } from 'react-bootstrap';
+import { ChangeEvent } from 'react';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 import { AiOutlineSearch } from 'react-icons/ai';
+import { useAppDispatch, useAppSelector } from '../../lib/hooks';
+import { fetchBooks } from '../../services/fetchBooks';
+import { fetchFilteredBooks } from '../../services/fetchFilteredBooks';
+import { fetchSortedBooks } from '../../services/fetchSortedBooks';
 import {
 	clearBooks,
-	fetchBooks,
-	fetchFilteredBooks,
-	fetchSortedBooks,
 	filterBooks,
 	searchBookByName,
 	sortBooks,
 } from '../../store/bookSlice';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import styles from './searchBar.module.scss';
+import { FilterType, SortType } from '../../types/types';
+import styles from './SearchBar.module.scss';
 
 const filterList = [
 	'all',
@@ -35,13 +36,13 @@ const SearchBar = () => {
 	}
 
 	function handleFilter(e: ChangeEvent<HTMLSelectElement>) {
-		dispatch(filterBooks(e.target.value));
+		dispatch(filterBooks(e.target.value as FilterType));
 		dispatch(clearBooks());
 		dispatch(fetchFilteredBooks({ name, maxResults: 30, startIndex: 0 }));
 	}
 
 	function handleSort(e: ChangeEvent<HTMLSelectElement>) {
-		dispatch(sortBooks(e.target.value));
+		dispatch(sortBooks(e.target.value as SortType));
 		dispatch(clearBooks());
 		dispatch(fetchSortedBooks({ name, maxResults: 30, startIndex: 0 }));
 	}

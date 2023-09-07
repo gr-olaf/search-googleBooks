@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card } from 'react-bootstrap';
-import ModalWindow from '../modalWindow/ModalWindow';
-import styles from './bookItem.module.scss';
+import ModalWindow from '../ModalWindow/ModalWindow';
+import styles from './BookItem.module.scss';
 
 interface BookItemProps {
 	img: string;
@@ -11,13 +11,8 @@ interface BookItemProps {
 	description: string;
 }
 
-const BookItem = ({
-	img,
-	category,
-	title,
-	author,
-	description,
-}: BookItemProps) => {
+const BookItem = (props: BookItemProps) => {
+	const { img, category, title, author, description } = props;
 	const [show, setShow] = useState(false);
 
 	const handleShow = () => {

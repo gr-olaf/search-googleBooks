@@ -1,14 +1,10 @@
-import SearchBar from './components/searchBar/SearchBar';
-import BookList from './components/bookList/BookList';
+import SearchBar from './components/SearchBar/SearchBar';
+import BookList from './components/BookList/BookList';
+import './App.css';
 
 function App() {
 	return (
-		<div
-			style={{
-				width: '80%',
-				margin: '0 auto',
-			}}
-		>
+		<div className="app">
 			<SearchBar />
 			<BookList />
 		</div>
@@ -16,3 +12,4 @@ function App() {
 }
 
 export default App;
+
