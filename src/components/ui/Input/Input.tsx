@@ -19,8 +19,13 @@ export const Input = (props: InputProps) => {
 				value={name}
 				onChange={handleSearch}
 				onKeyDown={searchBook}
+				data-testid="Input"
 			/>
-			<Button variant="outline-secondary" onMouseDown={searchBook}>
+			<Button
+				variant="outline-secondary"
+				onMouseDown={searchBook}
+				data-testid="InputButton"
+			>
 				<AiOutlineSearch />
 			</Button>
 		</InputGroup>

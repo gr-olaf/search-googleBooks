@@ -46,7 +46,7 @@ const SearchBar = () => {
 	};
 
 	return (
-		<div className={styles.searchBar}>
+		<div className={styles.searchBar} data-testid="SearchBar">
 			<h1>Search for Book</h1>
 			<Input name={name} handleSearch={handleSearch} searchBook={searchBook} />
 			<Row className="mt-3">
